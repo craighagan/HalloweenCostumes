@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO
 from itertools import cycle
 
 last_played_time = 0
-sound_interval = 2*60
+sound_interval = 60
 
 GPIO.setmode(GPIO.BCM)
 
