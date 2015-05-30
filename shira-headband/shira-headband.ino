@@ -6,9 +6,9 @@
 #define NR_LEDS 3
 
 LED leds[] = {
-  LED(4),
+  LED(5),
   LED(3),
-  LED(2),
+  LED(6),
 };
 
 HEADBAND headband(leds, NR_LEDS);

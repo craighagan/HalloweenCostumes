@@ -24,20 +24,25 @@ void LED::off()
   digitalWrite(_pin, LOW);
 }
 
+void LED::dim(int amount)
+{
+  analogWrite(_pin, amount); 
+}
+
 void LED::dot()
 {
   digitalWrite(_pin, HIGH);
-  do_sleep(250);
+  do_sleep(150);
   digitalWrite(_pin, LOW);
-  do_sleep(250);  
+  do_sleep(150);  
 }
 
 void LED::dash()
 {
   digitalWrite(_pin, HIGH);
-  do_sleep(1000);
+  do_sleep(500);
   digitalWrite(_pin, LOW);
-  do_sleep(250);
+  do_sleep(150);
 }
 
 void LED::blink(int time)

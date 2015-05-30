@@ -16,6 +16,7 @@ class LED
     void dash();
     void on();
     void off();
+    void dim(int amount);
     void blink(int time);
     void glow(int time);
     void choose();
