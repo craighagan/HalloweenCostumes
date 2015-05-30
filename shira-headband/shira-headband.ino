@@ -1,6 +1,9 @@
 
 #include "LED.h"
 #include "HEADBAND.h"
+#include "JeeLib.h" // Low power functions library
+ISR(WDT_vect) { Sleepy::watchdogEvent(); } // Setup the watchdog
+
 #define NR_LEDS 3
 
 LED leds[] = {

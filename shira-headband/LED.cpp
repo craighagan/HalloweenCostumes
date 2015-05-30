@@ -7,6 +7,7 @@
 
 #include "Arduino.h"
 #include "LED.h"
+#include "JeeLib.h" // Low power functions library
 
 LED::LED(int pin) {
   pinMode(pin, OUTPUT);
@@ -26,23 +27,23 @@ void LED::off()
 void LED::dot()
 {
   digitalWrite(_pin, HIGH);
-  delay(250);
+  Sleepy::loseSomeTime(250);
   digitalWrite(_pin, LOW);
-  delay(250);  
+  Sleepy::loseSomeTime(250);  
 }
 
 void LED::dash()
 {
   digitalWrite(_pin, HIGH);
-  delay(1000);
+  Sleepy::loseSomeTime(1000);
   digitalWrite(_pin, LOW);
-  delay(250);
+  Sleepy::loseSomeTime(250);
 }
 
 void LED::blink(int time)
 {
  digitalWrite(_pin, HIGH);
- delay(time);
+ Sleepy::loseSomeTime(time);
  digitalWrite(_pin, LOW); 
 }
 
@@ -51,12 +52,12 @@ void LED::glow(int time)
  int i;
  for(i=0;i<=255;i++) {
    analogWrite(_pin, i);
-   delay(10);
+   Sleepy::loseSomeTime(10);
  }
  delay(time);
  for(i=255;i>=0;i--) {
    analogWrite(_pin, i);
-   delay(10);
+   Sleepy::loseSomeTime(10);
  } 
 }
 
