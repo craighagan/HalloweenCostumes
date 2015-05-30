@@ -95,7 +95,9 @@ void HEADBAND::shira_morse() {
   do_sleep(between_letter_delay);
 
   // h
-  led = random(_nr_leds);
+  led += 1;
+  if (led > _nr_leds) led=0;
+  
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dot();  
@@ -106,14 +108,18 @@ void HEADBAND::shira_morse() {
   do_sleep(between_letter_delay);
 
   // i
-  led = random(_nr_leds);
+  led += 1;
+  if (led > _nr_leds) led=0;
+
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dot();  
   do_sleep(between_letter_delay);
 
   // r
-  led = random(_nr_leds);
+  led += 1;
+  if (led > _nr_leds) led=0;
+
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dash();
@@ -122,7 +128,9 @@ void HEADBAND::shira_morse() {
   do_sleep(between_letter_delay);
 
   // a
-  led = random(_nr_leds);
+  led += 1;
+  if (led > _nr_leds) led=0;
+
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dash();
@@ -132,7 +140,7 @@ void HEADBAND::shira_morse() {
 
 void HEADBAND::start() {
   int led;
-  int action = random(13);
+  int action = random(15);
   switch(action) {
     case 0:
     case 1:
@@ -144,28 +152,32 @@ void HEADBAND::start() {
       // strobe down
       strobe_down();
       break;
-    case 4:
     case 5:
+      strobe_up();
+      strobe_down();
+      break;
     case 6:
     case 7:
+    case 8:
+    case 9:
       led = random(_nr_leds);
       _leds[led].choose();
       break;
-    case 8:
+    case 10:
       glow_up();
       break;
-    case 9:
+    case 11:
       glow_down();
       break;
-    case 10:
+    case 12:
       glow_all();
       break;
-    case 11:
+    case 13:
       blink_all();
       break;
-    case 12:
+    case 14:
       shira_morse();
       break;
   }
-  do_sleep(2000);
+  do_sleep(random(15)*1000);
 }
