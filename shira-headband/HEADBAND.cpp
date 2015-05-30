@@ -4,11 +4,10 @@
   Released into the public domain.
 */
 
-#include "JeeLib.h" // Low power functions library
 
 #include "Arduino.h"
 #include "HEADBAND.h"
-
+#include "Sleep.h"
 
 HEADBAND::HEADBAND(LED leds[], int nr_leds) {
   _leds = leds;
@@ -19,7 +18,7 @@ void HEADBAND::strobe_up() {
   int i;
   for(i=0;i<_nr_leds;i++) {
      _leds[i].blink(100);
-     Sleepy::loseSomeTime(10); 
+     do_sleep(10); 
   }
 }
 
@@ -27,7 +26,7 @@ void HEADBAND::strobe_down() {
   int i;
   for(i=_nr_leds-1;i>=0;i--) {
      _leds[i].blink(100);
-     Sleepy::loseSomeTime(10);
+     do_sleep(10);
   }  
 }
 
@@ -46,7 +45,6 @@ void HEADBAND::start() {
     case 2:
       led = random(_nr_leds);
       _leds[led].choose();
-      Sleepy::loseSomeTime(250);
       break;
   }
 }

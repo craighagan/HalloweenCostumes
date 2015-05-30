@@ -26,11 +26,6 @@ boolean BUTTON::pressed()
 boolean BUTTON::debounce_pressed()
 {
   int cur_reading = digitalRead(_pin);
-  Serial.print("got");
-  Serial.print(cur_reading);
-  Serial.print("\t");
-  Serial.print(_state);
-  Serial.print("\n");
   if (cur_reading != _last_state) {
     _last_debounce_time = millis();
     _state = HIGH;

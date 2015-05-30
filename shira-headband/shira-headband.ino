@@ -1,8 +1,7 @@
 
 #include "LED.h"
 #include "HEADBAND.h"
-#include "JeeLib.h" // Low power functions library
-ISR(WDT_vect) { Sleepy::watchdogEvent(); } // Setup the watchdog
+#include "Sleep.h"
 
 #define NR_LEDS 3
 
@@ -17,9 +16,8 @@ HEADBAND headband(leds, NR_LEDS);
 int i;
 
 void setup() {
-   Serial.begin(9600);
-   Serial.print("hello world\n");
-   randomSeed(analogRead(0));
+  setup_sleep();
+  randomSeed(analogRead(0));
    for(i=0;i<NR_LEDS;i++) {
       leds[i].off(); 
    }
