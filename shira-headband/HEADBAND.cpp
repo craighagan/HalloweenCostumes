@@ -9,6 +9,8 @@
 #include "HEADBAND.h"
 #include "Sleep.h"
 
+#define GLOW_RATE 3
+
 HEADBAND::HEADBAND(LED leds[], int nr_leds) {
   _leds = leds;
   _nr_leds = nr_leds;
@@ -16,71 +18,102 @@ HEADBAND::HEADBAND(LED leds[], int nr_leds) {
 
 void HEADBAND::strobe_up() {
   int i;
-  for(i=0;i<_nr_leds;i++) {
-     _leds[i].blink(100);
-     do_sleep(10); 
+  for (i = 0; i < _nr_leds; i++) {
+    _leds[i].blink(100);
+    do_sleep(10);
   }
 }
 
 void HEADBAND::strobe_down() {
   int i;
-  for(i=_nr_leds-1;i>=0;i--) {
-     _leds[i].blink(100);
-     do_sleep(10);
-  }  
+  for (i = _nr_leds - 1; i >= 0; i--) {
+    _leds[i].blink(100);
+    do_sleep(10);
+  }
 }
 
 
 void HEADBAND::glow_up() {
   int i;
-  for(i=0;i<_nr_leds-1;i++) {
+  for (i = 0; i < _nr_leds - 1; i++) {
     _leds[i].glow(100);
-  } 
+  }
 }
 
 void HEADBAND::glow_down() {
   int i;
-  for(i=_nr_leds-1;i>=0;i--) {
+  for (i = _nr_leds - 1; i >= 0; i--) {
     _leds[i].glow(100);
-  } 
+  }
 }
 
 void HEADBAND::glow_all() {
- int led;
- int amount;
- for(amount=0;amount<=255;amount++) {
-   for(led=0;led<_nr_leds;led++) {
-     _leds[led].dim(amount);
-   }
-   do_sleep(10);
- }
- do_sleep(100); 
- for(amount=255;amount>=0;amount--) {
-   for(led=0;led<_nr_leds;led++) {
-     _leds[led].dim(amount);
-   }
-   do_sleep(10);
- }
+  int led;
+  int amount;
+  for (amount = 0; amount <= 255; amount += GLOW_RATE) {
+    for (led = 0; led < _nr_leds; led++) {
+      _leds[led].dim(amount);
+    }
+    do_sleep(10);
+  }
+  do_sleep(100);
+  for (amount = 255; amount >= 0; amount-= GLOW_RATE) {
+    for (led = 0; led < _nr_leds; led++) {
+      _leds[led].dim(amount);
+    }
+    do_sleep(10);
+  }
 }
 
-void HEADBAND::blink_all() {
-  int i;
-  for(i=0;i<_nr_leds;i++) {
-    _leds[i].on();
-  } 
-  do_sleep(10);
-  for(i=0;i<_nr_leds;i++) {
+void HEADBAND::blink_all(int nr_times) {
+  int i, j;
+  for (j = 0; j < nr_times; j++) {
+    for (i = 0; i < _nr_leds; i++) {
+      _leds[i].on();
+    }
+    do_sleep(10);
+    for (i = 0; i < _nr_leds; i++) {
+      _leds[i].off();
+    }
+  }
+}
+
+void HEADBAND::alternate(int nr_times) {
+  int i, j;
+  boolean turn_on = false;
+
+  for (j = 0; j < nr_times; j++) {
+    for (i = 0; i < _nr_leds; i++) {
+      if (i == 2) {
+        _leds[i].on();
+      } else {
+        _leds[i].off();
+      }
+      turn_on = !turn_on;
+    }
+    do_sleep(96);
+    for (i = 0; i < _nr_leds; i++) {
+      if (i == 2) {
+        _leds[i].off();
+      } else {
+        _leds[i].on();
+      }
+      turn_on = !turn_on;
+    }
+    do_sleep(96);
+  }
+  for (i = 0; i < _nr_leds; i++) {
     _leds[i].off();
-  }   
+  }
 }
 
 void HEADBAND::shira_morse() {
-// shira : 
-// s : ...
-// h : ....
-// i : ..
-// r : .-.
-// a : .-
+  // shira :
+  // s : ...
+  // h : ....
+  // i : ..
+  // r : .-.
+  // a : .-
   int led;
   int after_letter_delay = 128;
   int between_letter_delay = 532;
@@ -89,18 +122,18 @@ void HEADBAND::shira_morse() {
   led = random(_nr_leds);
   _leds[led].dot();
   do_sleep(after_letter_delay);
-  _leds[led].dot();  
+  _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dot();
   do_sleep(between_letter_delay);
 
   // h
   led += 1;
-  if (led > _nr_leds) led=0;
-  
+  if (led > _nr_leds) led = 0;
+
   _leds[led].dot();
   do_sleep(after_letter_delay);
-  _leds[led].dot();  
+  _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dot();
   do_sleep(after_letter_delay);
@@ -109,39 +142,51 @@ void HEADBAND::shira_morse() {
 
   // i
   led += 1;
-  if (led > _nr_leds) led=0;
+  if (led > _nr_leds) led = 0;
 
   _leds[led].dot();
   do_sleep(after_letter_delay);
-  _leds[led].dot();  
+  _leds[led].dot();
   do_sleep(between_letter_delay);
 
   // r
   led += 1;
-  if (led > _nr_leds) led=0;
+  if (led > _nr_leds) led = 0;
 
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dash();
   do_sleep(after_letter_delay);
-  _leds[led].dot();  
+  _leds[led].dot();
   do_sleep(between_letter_delay);
 
   // a
   led += 1;
-  if (led > _nr_leds) led=0;
+  if (led > _nr_leds) led = 0;
 
   _leds[led].dot();
   do_sleep(after_letter_delay);
   _leds[led].dash();
   do_sleep(between_letter_delay);
-  
+
+}
+
+void HEADBAND::all_on() {
+  int led;
+  for (led = 0; led < _nr_leds; led++) {
+    _leds[led].on();
+  }
+  do_sleep(64);
+  for (led = 0; led < _nr_leds; led++) {
+    _leds[led].off();
+  }
 }
 
 void HEADBAND::start() {
   int led;
-  int action = random(15);
-  switch(action) {
+  int action = random(17);
+
+  switch (action) {
     case 0:
     case 1:
       // strobe up
@@ -173,11 +218,17 @@ void HEADBAND::start() {
       glow_all();
       break;
     case 13:
-      blink_all();
+      blink_all(random(3));
       break;
     case 14:
       shira_morse();
       break;
+    case 15:
+      alternate(random(5) + 5);
+      break;
+    case 16:
+      all_on();
+      break;
   }
-  do_sleep(random(15)*1000);
+  do_sleep(random(15) * 1000);
 }

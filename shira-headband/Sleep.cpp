@@ -4,7 +4,7 @@
 #include <avr/power.h>
 #include <avr/interrupt.h>
 
- 
+#define Attiny85 1
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif

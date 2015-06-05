@@ -9,6 +9,8 @@
 #include "LED.h"
 #include "Sleep.h"
 
+#define GLOW_RATE 1
+
 LED::LED(int pin) {
   pinMode(pin, OUTPUT);
   _pin = pin;
@@ -55,14 +57,14 @@ void LED::blink(int time)
 void LED::glow(int time)
 {
  int i;
- for(i=0;i<=255;i++) {
+ for(i=0;i<=255;i+=GLOW_RATE) {
    analogWrite(_pin, i);
-   do_sleep(10);
+   do_sleep(16);
  }
  delay(time);
- for(i=255;i>=0;i--) {
+ for(i=255;i>=0;i-=GLOW_RATE) {
    analogWrite(_pin, i);
-   do_sleep(10);
+   do_sleep(16);
  } 
 }
 

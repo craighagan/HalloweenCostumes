@@ -18,9 +18,11 @@ class HEADBAND
   void strobe_down();
   void glow_up();
   void glow_down();
-  void blink_all();
+  void blink_all(int nr_times);
   void glow_all();
   void shira_morse();
+  void alternate(int nr_times);
+  void all_on();
   private:
     LED *_leds;
     int _nr_leds;
