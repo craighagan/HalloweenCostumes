@@ -4,7 +4,6 @@
 #include <avr/power.h>
 #include <avr/interrupt.h>
 
-#define Attiny85 1
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif
@@ -22,7 +21,7 @@ void setup_sleep() {
 // system wakes up when wtchdog is timed out
 // taken from https://arduinoelectronics.wordpress.com/2014/01/06/ultra-low-power-led-flasher-with-attiny/
 
-#ifdef Attiny85
+#ifdef ARDUINO_attiny
 void system_sleep() {
 cbi(ADCSRA,ADEN);                    // switch Analog to Digitalconverter OFF
  
@@ -40,7 +39,7 @@ void system_sleep() {
 }
 #endif
 
-#ifdef Attiny85
+#ifdef ARDUINO_attiny
 
 // taken from https://arduinoelectronics.wordpress.com/2014/01/06/ultra-low-power-led-flasher-with-attiny/
 // 0=16ms, 1=32ms,2=64ms,3=128ms,4=250ms,5=500ms
