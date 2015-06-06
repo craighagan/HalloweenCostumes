@@ -17,33 +17,33 @@ HEADBAND::HEADBAND(LED leds[], int nr_leds) {
 }
 
 void HEADBAND::strobe_up() {
-  int i;
-  for (i = 0; i < _nr_leds; i++) {
-    _leds[i].blink(100);
+  int led;
+  for (led = 0; led < _nr_leds; led++) {
+    _leds[led].blink(100);
     do_sleep(10);
   }
 }
 
 void HEADBAND::strobe_down() {
-  int i;
-  for (i = _nr_leds - 1; i >= 0; i--) {
-    _leds[i].blink(100);
+  int led;
+  for (led = _nr_leds - 1; led >= 0; led--) {
+    _leds[led].blink(100);
     do_sleep(10);
   }
 }
 
 
 void HEADBAND::glow_up() {
-  int i;
-  for (i = 0; i < _nr_leds - 1; i++) {
-    _leds[i].glow(100);
+  int led;
+  for (led = 0; led < _nr_leds - 1; led++) {
+    _leds[led].glow(100);
   }
 }
 
 void HEADBAND::glow_down() {
-  int i;
-  for (i = _nr_leds - 1; i >= 0; i--) {
-    _leds[i].glow(100);
+  int led;
+  for (led = _nr_leds - 1; led >= 0; led--) {
+    _leds[led].glow(100);
   }
 }
 
@@ -57,7 +57,7 @@ void HEADBAND::glow_all() {
     do_sleep(10);
   }
   do_sleep(100);
-  for (amount = 255; amount >= 0; amount-= GLOW_RATE) {
+  for (amount = 255; amount >= 0; amount -= GLOW_RATE) {
     for (led = 0; led < _nr_leds; led++) {
       _leds[led].dim(amount);
     }
@@ -66,44 +66,44 @@ void HEADBAND::glow_all() {
 }
 
 void HEADBAND::blink_all(int nr_times) {
-  int i, j;
-  for (j = 0; j < nr_times; j++) {
-    for (i = 0; i < _nr_leds; i++) {
-      _leds[i].on();
+  int led, nr_blinks;
+  for (nr_blinks = 0; nr_blinks < nr_times; nr_blinks++) {
+    for (led = 0; led < _nr_leds; led++) {
+      _leds[led].on();
     }
     do_sleep(10);
-    for (i = 0; i < _nr_leds; i++) {
-      _leds[i].off();
+    for (led = 0; led < _nr_leds; led++) {
+      _leds[led].off();
     }
   }
 }
 
 void HEADBAND::alternate(int nr_times) {
-  int i, j;
+  int led, nr_blinks;
   boolean turn_on = false;
 
-  for (j = 0; j < nr_times; j++) {
-    for (i = 0; i < _nr_leds; i++) {
-      if (i == 2) {
-        _leds[i].on();
+  for (nr_blinks = 0; nr_blinks < nr_times; nr_blinks++) {
+    for (led = 0; led < _nr_leds; led++) {
+      if (led == 2) {
+        _leds[led].on();
       } else {
-        _leds[i].off();
+        _leds[led].off();
       }
       turn_on = !turn_on;
     }
     do_sleep(96);
-    for (i = 0; i < _nr_leds; i++) {
-      if (i == 2) {
-        _leds[i].off();
+    for (led = 0; led < _nr_leds; led++) {
+      if (led == 2) {
+        _leds[led].off();
       } else {
-        _leds[i].on();
+        _leds[led].on();
       }
       turn_on = !turn_on;
     }
     do_sleep(96);
   }
-  for (i = 0; i < _nr_leds; i++) {
-    _leds[i].off();
+  for (led = 0; led < _nr_leds; led++) {
+    _leds[led].off();
   }
 }
 

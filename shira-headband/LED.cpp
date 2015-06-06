@@ -28,7 +28,7 @@ void LED::off()
 
 void LED::dim(int amount)
 {
-  analogWrite(_pin, amount); 
+  analogWrite(_pin, amount);
 }
 
 void LED::dot()
@@ -36,7 +36,7 @@ void LED::dot()
   digitalWrite(_pin, HIGH);
   do_sleep(150);
   digitalWrite(_pin, LOW);
-  do_sleep(150);  
+  do_sleep(150);
 }
 
 void LED::dash()
@@ -49,29 +49,29 @@ void LED::dash()
 
 void LED::blink(int time)
 {
- digitalWrite(_pin, HIGH);
- do_sleep(time);
- digitalWrite(_pin, LOW); 
+  digitalWrite(_pin, HIGH);
+  do_sleep(time);
+  digitalWrite(_pin, LOW);
 }
 
 void LED::glow(int time)
 {
- int i;
- for(i=0;i<=255;i+=GLOW_RATE) {
-   analogWrite(_pin, i);
-   do_sleep(16);
- }
- delay(time);
- for(i=255;i>=0;i-=GLOW_RATE) {
-   analogWrite(_pin, i);
-   do_sleep(16);
- } 
+  int i;
+  for (i = 0; i <= 255; i += GLOW_RATE) {
+    analogWrite(_pin, i);
+    do_sleep(16);
+  }
+  delay(time);
+  for (i = 255; i >= 0; i -= GLOW_RATE) {
+    analogWrite(_pin, i);
+    do_sleep(16);
+  }
 }
 
 void LED::choose() {
- int which;
- which = random(4);
- switch (which) {
+  int which;
+  which = random(4);
+  switch (which) {
     case 0:
       // dot
       LED::dot();
@@ -82,11 +82,11 @@ void LED::choose() {
       break;
     case 2:
       // blink
-      LED::blink(random(100,1000));
+      LED::blink(random(100, 1000));
       break;
     case 3:
       // glow
-      LED::glow(random(100,1000));
+      LED::glow(random(100, 1000));
       break;
- }  
+  }
 }

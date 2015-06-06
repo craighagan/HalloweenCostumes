@@ -24,7 +24,7 @@ void setup() {
     leds[i].off();
   }
   headband.strobe_up();
-  do_sleep(128);  
+  do_sleep(128);
 }
 
 void loop() {

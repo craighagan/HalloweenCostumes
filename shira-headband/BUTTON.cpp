@@ -14,13 +14,13 @@ BUTTON::BUTTON(int pin) {
   _last_debounce_time = millis();
   _last_state = digitalRead(_pin);
   _state = HIGH;
-  
+
   digitalWrite(_pin, HIGH);
 }
 
 boolean BUTTON::pressed()
 {
-   return digitalRead(_pin) == LOW; 
+  return digitalRead(_pin) == LOW;
 }
 
 boolean BUTTON::debounce_pressed()
@@ -30,11 +30,11 @@ boolean BUTTON::debounce_pressed()
     _last_debounce_time = millis();
     _state = HIGH;
   } else {
-    if((millis() - _last_debounce_time) > DEBOUNCE_DELAY) {
-       _state = cur_reading;
-    } 
+    if ((millis() - _last_debounce_time) > DEBOUNCE_DELAY) {
+      _state = cur_reading;
+    }
   }
   _last_state = cur_reading;
-  
+
   return _state == LOW;
 }
