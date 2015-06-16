@@ -23,6 +23,8 @@ void setup() {
   for (i = 0; i < NR_LEDS; i++) {
     leds[i].off();
   }
+  headband.test();
+  do_sleep(64);
   headband.strobe_up();
   do_sleep(128);
 }

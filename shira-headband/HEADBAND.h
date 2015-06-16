@@ -24,6 +24,7 @@ class HEADBAND {
     void shira_morse();
     void alternate(int nr_times);
     void all_on();
+    void test();
   private:
     LED *_leds;
     int _nr_leds;

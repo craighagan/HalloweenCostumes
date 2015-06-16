@@ -20,6 +20,8 @@ void setup_sleep() {
 // set system into the sleep state
 // system wakes up when wtchdog is timed out
 // taken from https://arduinoelectronics.wordpress.com/2014/01/06/ultra-low-power-led-flasher-with-attiny/
+//
+// I've measured 5-6ua at 5v and 4-5ua at 3v
 
 #ifdef ARDUINO_attiny
 void system_sleep() {

@@ -178,10 +178,19 @@ void HEADBAND::all_on() {
   }
 }
 
+void HEADBAND::test() {
+  int led;
+  for (led = 0; led < _nr_leds; led++) {
+    _leds[led].on();
+    do_sleep(1024);
+    _leds[led].off();
+  }  
+}
+
 void HEADBAND::start() {
   int led;
   int action = random(17);
-
+  
   switch (action) {
     case 0:
     case 1:
