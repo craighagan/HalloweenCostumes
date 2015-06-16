@@ -8,8 +8,7 @@
 
 #include "Arduino.h"
 
-class LED
-{
+class LED {
   public:
     LED(int pin);
     void dot();

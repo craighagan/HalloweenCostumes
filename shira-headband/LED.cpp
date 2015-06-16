@@ -16,46 +16,39 @@ LED::LED(int pin) {
   _pin = pin;
 }
 
-void LED::on()
-{
+void LED::on() {
   digitalWrite(_pin, HIGH);
 }
 
-void LED::off()
-{
+void LED::off() {
   digitalWrite(_pin, LOW);
 }
 
-void LED::dim(int amount)
-{
+void LED::dim(int amount) {
   analogWrite(_pin, amount);
 }
 
-void LED::dot()
-{
+void LED::dot() {
   digitalWrite(_pin, HIGH);
   do_sleep(150);
   digitalWrite(_pin, LOW);
   do_sleep(150);
 }
 
-void LED::dash()
-{
+void LED::dash() {
   digitalWrite(_pin, HIGH);
   do_sleep(500);
   digitalWrite(_pin, LOW);
   do_sleep(150);
 }
 
-void LED::blink(int time)
-{
+void LED::blink(int time) {
   digitalWrite(_pin, HIGH);
   do_sleep(time);
   digitalWrite(_pin, LOW);
 }
 
-void LED::glow(int time)
-{
+void LED::glow(int time) {
   int i;
   for (i = 0; i <= 255; i += GLOW_RATE) {
     analogWrite(_pin, i);

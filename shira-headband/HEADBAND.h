@@ -9,8 +9,9 @@
 #include "Arduino.h"
 #include "LED.h"
 
-class HEADBAND
-{
+#define GLOW_RATE 3
+
+class HEADBAND {
   public:
     HEADBAND(LED leds[], int nr_leds);
     void start();

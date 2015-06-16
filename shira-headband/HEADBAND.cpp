@@ -9,8 +9,6 @@
 #include "HEADBAND.h"
 #include "Sleep.h"
 
-#define GLOW_RATE 3
-
 HEADBAND::HEADBAND(LED leds[], int nr_leds) {
   _leds = leds;
   _nr_leds = nr_leds;
@@ -31,7 +29,6 @@ void HEADBAND::strobe_down() {
     do_sleep(10);
   }
 }
-
 
 void HEADBAND::glow_up() {
   int led;
@@ -168,7 +165,6 @@ void HEADBAND::shira_morse() {
   do_sleep(after_letter_delay);
   _leds[led].dash();
   do_sleep(between_letter_delay);
-
 }
 
 void HEADBAND::all_on() {

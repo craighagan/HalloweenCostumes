@@ -10,8 +10,7 @@
 
 #define DEBOUNCE_DELAY 50
 
-class BUTTON
-{
+class BUTTON {
   public:
     BUTTON(int pin);
     boolean pressed();

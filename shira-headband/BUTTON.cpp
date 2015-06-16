@@ -18,13 +18,11 @@ BUTTON::BUTTON(int pin) {
   digitalWrite(_pin, HIGH);
 }
 
-boolean BUTTON::pressed()
-{
+boolean BUTTON::pressed() {
   return digitalRead(_pin) == LOW;
 }
 
-boolean BUTTON::debounce_pressed()
-{
+boolean BUTTON::debounce_pressed() {
   int cur_reading = digitalRead(_pin);
   if (cur_reading != _last_state) {
     _last_debounce_time = millis();
