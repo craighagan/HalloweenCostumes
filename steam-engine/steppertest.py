@@ -9,6 +9,10 @@
 import time
 import RPi.GPIO as GPIO
 
+# cleanup anything which may already have been
+# programmed
+GPIO.cleanup()
+
 # Use BCM GPIO references
 # instead of physical pin numbers
 GPIO.setmode(GPIO.BCM)
@@ -22,6 +26,7 @@ class StepperMotor(object):
     """
     self._pins = pins
     self.speed = speed
+    self.wait_time = wait_time
     self.iterations_per_revolution = 510
     self.clockwise_steps = [
       [1,0,0,0],
@@ -60,7 +65,7 @@ class StepperMotor(object):
     for i in xrange(int(iterations)):
       self._execute_steps(self.clockwise_steps)
       # Wait before moving on
-      time.sleep(WaitTime)
+      time.sleep(self.wait_time)
 
 
   def rotate_counterclockwise(self, iterations):
@@ -71,7 +76,7 @@ class StepperMotor(object):
     for i in xrange(int(iterations)):
       self._execute_steps(reversed(self.clockwise_steps))
       # Wait before moving on
-      time.sleep(WaitTime)
+      time.sleep(self.wait_time)
 
   def clockwise(self, revolutions=1):
     """
