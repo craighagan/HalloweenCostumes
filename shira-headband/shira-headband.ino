@@ -6,8 +6,8 @@
 #define NR_LEDS 5
 
 LED leds[] = {
-  LED(1),
   LED(0),
+  LED(1),
   LED(2),
   LED(3),
   LED(4),
