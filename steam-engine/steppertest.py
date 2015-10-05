@@ -35,8 +35,11 @@ class StepperMotor(object):
       [0,1,1,0],
       [0,0,1,0],
       [0,0,0,1],
-      [0,0,0,0],
       [1,0,0,1],
+    ]
+
+    self.poweroff_steps = [
+      [0,0,0,0],
     ]
 
     # validation
@@ -57,6 +60,8 @@ class StepperMotor(object):
           GPIO.output(self._pins[pin], False)
         time.sleep(self.speed)
 
+
+
   def rotate_clockwise(self, iterations):
     """
     @iterations : how many repeats of the steps to run,
@@ -67,6 +72,7 @@ class StepperMotor(object):
       # Wait before moving on
       time.sleep(self.wait_time)
 
+    self._execute_steps(self.poweroff_steps)
 
   def rotate_counterclockwise(self, iterations):
     """
@@ -77,6 +83,8 @@ class StepperMotor(object):
       self._execute_steps(reversed(self.clockwise_steps))
       # Wait before moving on
       time.sleep(self.wait_time)
+
+    self._execute_steps(self.poweroff_steps)
 
   def clockwise(self, revolutions=1):
     """
