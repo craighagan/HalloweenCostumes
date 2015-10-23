@@ -60,9 +60,10 @@ class StepperMotor(object):
           GPIO.output(self._pins[pin], False)
         time.sleep(self.speed)
 
+  def poweroff(self):
+    self._execute_steps(self.poweroff_steps)
 
-
-  def rotate_clockwise(self, iterations):
+  def rotate_clockwise(self, iterations, poweroff=True):
     """
     @iterations : how many repeats of the steps to run,
     510 iterations is about 360 degrees
@@ -72,9 +73,10 @@ class StepperMotor(object):
       # Wait before moving on
       time.sleep(self.wait_time)
 
-    self._execute_steps(self.poweroff_steps)
+    if poweroff:
+      self.poweroff()
 
-  def rotate_counterclockwise(self, iterations):
+  def rotate_counterclockwise(self, iterations, poweroff=True):
     """
     @iterations : how many repeats of the steps to run,
     510 iterations is about 360 degrees
@@ -82,18 +84,22 @@ class StepperMotor(object):
     for i in xrange(int(iterations)):
       self._execute_steps(reversed(self.clockwise_steps))
       # Wait before moving on
+      self.poweroff()
       time.sleep(self.wait_time)
 
-    self._execute_steps(self.poweroff_steps)
+    if poweroff:
+      self.poweroff()
 
   def clockwise(self, revolutions=1):
     """
     @revolutions roughly how many revolutions to rotate
     """
-    self.rotate_clockwise(revolutions*self.iterations_per_revolution)
+    self.rotate_clockwise(revolutions*self.iterations_per_revolution, poweroff=False)
+    self._execute_steps(self.poweroff_steps)
 
   def counterclockwise(self, revolutions=1):
     """
     @revolutions roughly how many revolutions to rotate
     """
-    self.rotate_counterclockwise(revolutions*self.iterations_per_revolution)
+    self.rotate_counterclockwise(revolutions*self.iterations_per_revolution, poweroff=False)
+    self.poweroff()
