@@ -1,0 +1,7 @@
+sudo apt-get -y purge libx11-6 libgtk-3-common xkb-data lxde-icon-theme raspberrypi-artwork penguinspuzzle sudo apt-get install wicd-curses
+sudo apt-get install wicd-curses
+
+
+
+read:
+http://www.samplerbox.org/article/fastbootrpi
