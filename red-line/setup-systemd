@@ -5,7 +5,7 @@ cat - <<EOF > /etc/systemd/system/costume.service
 Description=costume.buttons
 
 [Service]
-ExecStart=/home/pi/steam-engine/test-button.py
+ExecStart=/home/pi/red-line/test-button.py
 Restart=on-abort
 
 [Install]

@@ -7,11 +7,10 @@ from itertools import cycle
 import threading
 import subprocess
 import RPi.GPIO as GPIO
-import steppermotor
 
 last_played_time = time() + 3600
 sound_interval = 2 * 60
-gain = 90
+gain = 250
 
 GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
@@ -39,9 +38,6 @@ class Button(object):
         global last_played_time
 
         try:
-            right = RunWheels(pins=[5, 6, 13, 19], name="Right")
-            left = RunWheels(pins=[12, 16, 20, 21], name="Left")
-
             mp3 = self._mp3_iter.next()
             print("would play %s" % (mp3))
             #os.system("mpg321 -q %s -g %s" % (mp3, gain))
@@ -49,9 +45,6 @@ class Button(object):
             p = subprocess.Popen(cmd)
 
             if not self._stop_if_depress:
-                right.start()
-                left.start()
-
                 p.communicate()
 
             else:  # music time
@@ -66,8 +59,6 @@ class Button(object):
 
             last_played_time = time()
             print "set last_played_time to %s" % last_played_time
-            right.stop()
-            left.stop()
 
         except StopIteration:
             pass
@@ -83,8 +74,7 @@ button_array = []
 button_array.append(Button(22, "/home/pi/red-line/buttons/door"))
 button_array.append(Button(23, "/home/pi/red-line/buttons/next-stop"))
 button_array.append(Button(24, "/home/pi/red-line/buttons/now-arriving"))
-button_array.append(
-    Button(27, "/home/pi/red-line/buttons/music", stop_if_depress=True))
+button_array.append(Button(24, "/home/pi/red-line/buttons/now-arriving"))
 
 # initialize sound
 os.system("sudo amixer cset numid=0")
@@ -94,20 +84,26 @@ os.system("sudo alsactl store")
 
 # ding on startup`
 
-os.system("mpg321 -q /home/pi/red-line/buttons/whistle/bigboy-whistle.mp3")
+os.system("mpg321 -q -g %s /home/pi/red-line/buttons/door/redline-door-beep.mp3" % gain)
 last_played_time = time()
 last_played_button = 0
 
-while True:
-    for button in button_array:
-        button.checkpin()
+try:
+    while True:
+        for button in button_array:
+            button.checkpin()
 
-    if (last_played_time + sound_interval) < time():
-        print "last played is %s curtime is %s" % (last_played_time + sound_interval, time())
-        button_array[last_played_button].play_sound()
-        last_played_button += 1
+        if (last_played_time + sound_interval) < time():
+            print "last played is %s curtime is %s" % (last_played_time + sound_interval, time())
+            button_array[last_played_button].play_sound()
+            last_played_button += 1
 
-        if last_played_button >= len(button_array):
-            last_played_button = 0
+            if last_played_button >= len(button_array):
+                last_played_button = 0
 
-    sleep(0.1)
+        sleep(0.1)
+except:
+    raise
+
+finally:
+    GPIO.cleanup()
