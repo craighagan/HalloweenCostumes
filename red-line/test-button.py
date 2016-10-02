@@ -3,6 +3,7 @@
 import glob
 from time import sleep, time
 import os
+import json
 from itertools import cycle
 import threading
 import subprocess
@@ -10,10 +11,21 @@ import RPi.GPIO as GPIO
 
 last_played_time = time() + 3600
 sound_interval = 2 * 60
-gain = 250
+DEFAULT_GAIN = 90
 
 GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
+
+
+def _get_gain(mp3):
+    play_gain = DEFAULT_GAIN
+    mp3_config = os.path.join(mp3, '.json')
+    if os.path.exists(mp3_config):
+        mp3_config = json.load(mp3_config)
+        config_gain = mp3_config.get('gain')
+        if config_gain:
+            play_gain = config_gain
+    return play_gain
 
 
 class Button(object):
@@ -39,9 +51,10 @@ class Button(object):
 
         try:
             mp3 = self._mp3_iter.next()
-            print("would play %s" % (mp3))
+            play_gain = _get_gain(mp3)
+            print("would play %s with gain %s" % (mp3, play_gain))
             #os.system("mpg321 -q %s -g %s" % (mp3, gain))
-            cmd = ["mpg321", "-g", str(gain), "-q",  mp3, ]
+            cmd = ["mpg321", "-g", str(play_gain), "-q",  mp3, ]
             p = subprocess.Popen(cmd)
 
             if not self._stop_if_depress:
@@ -74,7 +87,7 @@ button_array = []
 button_array.append(Button(22, "/home/pi/red-line/buttons/door"))
 button_array.append(Button(23, "/home/pi/red-line/buttons/next-stop"))
 button_array.append(Button(24, "/home/pi/red-line/buttons/now-arriving"))
-button_array.append(Button(24, "/home/pi/red-line/buttons/now-arriving"))
+button_array.append(Button(25, "/home/pi/red-line/buttons/other"))
 
 # initialize sound
 os.system("sudo amixer cset numid=0")
@@ -84,7 +97,8 @@ os.system("sudo alsactl store")
 
 # ding on startup`
 
-os.system("mpg321 -q -g %s /home/pi/red-line/buttons/door/redline-door-beep.mp3" % gain)
+start_sound = "/home/pi/red-line/buttons/other/train-approaching.mp3"
+os.system("mpg321 -q -g %s %s " % (_get_gain(start_sound), start_sound))
 last_played_time = time()
 last_played_button = 0
 
