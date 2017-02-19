@@ -36,7 +36,6 @@ void loop() {
   unsigned long elapsed_time = 0;
 
   while (true) {
-
     started = false;
     finished = false;
     DisplayString = "";
@@ -49,7 +48,6 @@ void loop() {
     Serial.print("Ready\n");
     
     while (!started) {
-      //Serial.print("here2\n");
       started = sensor_tripped(START_SENSOR, SENSOR_LOW, SENSOR_HIGH);
     }
     starttime = millis();
@@ -69,10 +67,11 @@ void loop() {
     DisplayText(0, 0, "Start");
     while (!finished) {
       finished = sensor_tripped(END_SENSOR, SENSOR_LOW, SENSOR_HIGH);
-      //Serial.print("here5\n");
     }
     endtime = millis();
     elapsed_time = endtime - starttime;
+
+    // debounce finished sensor
     while (finished) {
       finished = sensor_tripped(END_SENSOR, SENSOR_LOW, SENSOR_HIGH);
     }
