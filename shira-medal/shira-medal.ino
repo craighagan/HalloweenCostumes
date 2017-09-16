@@ -6,7 +6,7 @@
 
 #define PIN       0
 #define NUM_LEDS 24
-#define MAX_MODES 8
+#define MAX_MODES 9
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, PIN);
 
@@ -190,17 +190,19 @@ void loop() {
     offset++;                      // Shift animation by 1 pixel on next frame
     break;
 
+  case 9:
+    // reset back to amber.
+    mode = 0;
+    color = 0xFF8000;
+    offset = 0;
+    nr_colors = 0;
+    break;
   }
   t = millis();                    // Current time in milliseconds
   if((t - prevTime) > 8000) {      // Every 8 seconds...
     offset = 0;
     mode = random(MAX_MODES);                        // Advance to next animation mode
     color  = Wheel(random(NUM_LEDS));                 // And change color
-    nr_colors += 1;
-    if(!color or nr_colors > 3) {
-      color = 0xFF8000; // preiodically reset to amber
-      nr_colors = 0;
-    }
     pixels.clear();                // Set all pixels to 'off' state
     prevTime = t;                  // Record the time of the last mode change
   }
