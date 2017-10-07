@@ -1,0 +1,17 @@
+as root
+
+cat - <<EOF > /etc/systemd/system/costume.service
+[Unit]
+Description=costume.buttons
+
+[Service]
+ExecStart=/home/pi/orange-line/test-button.py
+Restart=on-abort
+
+[Install]
+#WantedBy=multi-user.target
+WantedBy=local-fs.target
+EOF
+
+systemctl enable costume.service
+systemctl start costume.service

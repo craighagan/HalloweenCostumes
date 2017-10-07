@@ -1,0 +1,8 @@
+http://iwearshorts.com/blog/raspberry-pi-setting-up-your-audio/
+
+https://www.raspberrypi.org/forums/viewtopic.php?t=14966
+
+sudo amixer cset numid=0
+#amixer set PCM -- -1000
+amixer set PCM -- -2800
+sudo alsactl store
