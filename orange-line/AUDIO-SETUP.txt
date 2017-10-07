@@ -6,3 +6,9 @@ sudo amixer cset numid=0
 #amixer set PCM -- -1000
 amixer set PCM -- -2800
 sudo alsactl store
+
+
+
+to edit audio, consider grabbing a full length
+video/similar, then using http://www.audacityteam.org/
+to pull the audio from it
