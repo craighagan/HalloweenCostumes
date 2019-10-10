@@ -8,10 +8,13 @@
 #include "Arduino.h"
 #include "PUMPKIN.h"
 #include "Sleep.h"
+#include "DFRobotDFPlayerMini.h"
 
-PUMPKIN::PUMPKIN(LED leds[], int nr_leds) {
+
+PUMPKIN::PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3) {
   _leds = leds;
   _nr_leds = nr_leds;
+  _mp3 = mp3;
 }
 
 void PUMPKIN::strobe_up() {
@@ -45,19 +48,18 @@ void PUMPKIN::glow_down() {
 }
 
 
-
 void PUMPKIN::glow_purple() {
   int led;
   int amount;
   for (amount = 0; amount <= 255; amount += GLOW_RATE) {
-    for (led = _nr_leds/2; led < _nr_leds; led++) {
+    for (led = _nr_leds / 2; led < _nr_leds; led++) {
       _leds[led].dim(amount);
     }
     do_sleep(10);
   }
   do_sleep(100);
   for (amount = 255; amount >= 0; amount -= GLOW_RATE) {
-    for (led = _nr_leds/2; led < _nr_leds; led++) {
+    for (led = _nr_leds / 2; led < _nr_leds; led++) {
       _leds[led].dim(amount);
     }
     do_sleep(10);
@@ -69,14 +71,14 @@ void PUMPKIN::glow_orange() {
   int led;
   int amount;
   for (amount = 0; amount <= 255; amount += GLOW_RATE) {
-    for (led = 0; led < _nr_leds/2; led++) {
+    for (led = 0; led < _nr_leds / 2; led++) {
       _leds[led].dim(amount);
     }
     do_sleep(10);
   }
   do_sleep(100);
   for (amount = 255; amount >= 0; amount -= GLOW_RATE) {
-    for (led = 0; led < _nr_leds/2; led++) {
+    for (led = 0; led < _nr_leds / 2; led++) {
       _leds[led].dim(amount);
     }
     do_sleep(10);
@@ -120,17 +122,17 @@ void PUMPKIN::alternate_color(int middle_led, int nr_times, int blink_delay) {
 
   for (nr_blinks = 0; nr_blinks < nr_times; nr_blinks++) {
     for (led = 0; led < middle_led; led++) {
-        _leds[led].on();
+      _leds[led].on();
     }
     for (led = middle_led; led < _nr_leds; led++) {
-        _leds[led].off();
+      _leds[led].off();
     }
     do_sleep(blink_delay);
     for (led = 0; led < middle_led; led++) {
-        _leds[led].off();
+      _leds[led].off();
     }
     for (led = middle_led; led < _nr_leds; led++) {
-        _leds[led].on();
+      _leds[led].on();
     }
     do_sleep(blink_delay);
   }
@@ -243,6 +245,12 @@ void PUMPKIN::all_on() {
   }
 }
 
+void PUMPKIN::play_sound() {
+  if (_mp3->available()) {
+      _mp3->next();    
+  }
+}
+
 void PUMPKIN::test() {
   int led;
   for (led = 0; led < _nr_leds; led++) {
@@ -256,29 +264,35 @@ void PUMPKIN::start() {
   int led;
   int action = random(17);
 
-  action = 10; //deleteme
+  //action = 11; //deleteme
   switch (action) {
     case 0:
     case 1:
       // strobe up
+      play_sound();
       strobe_up();
       break;
     case 2:
     case 3:
       // strobe down
+      play_sound();
       strobe_down();
       break;
     case 5:
+      play_sound();
       strobe_up();
       strobe_down();
       break;
     case 6:
-      alternate_color(2, random(5) + 5, 45);
+      play_sound();
+      alternate_color(2, random(5) + 5, 65);
       break;
     case 7:
+      play_sound();
       glow_orange();
       break;
     case 8:
+      play_sound();
       glow_purple();
       break;
     case 9:
@@ -286,26 +300,33 @@ void PUMPKIN::start() {
       _leds[led].choose();
       break;
     case 10:
+      play_sound();
       alternate(random(5) + 5, 45);
       break;
     case 11:
-      alternate_color(2, random(5) + 5, 45);
+      play_sound();
+      alternate_color(2, random(5) + 5, 120);
       break;
     case 12:
+      play_sound();
       glow_all();
       break;
     case 13:
+      play_sound();
       blink_all(random(3));
       break;
     case 14:
+      play_sound();
       shira_morse();
       break;
     case 15:
+      play_sound();
       alternate(random(5) + 5, 45);
       break;
     case 16:
+      play_sound();
       all_on();
       break;
   }
-  do_sleep(random(30) * 1000);
+  do_sleep(random(5) * 1000);
 }

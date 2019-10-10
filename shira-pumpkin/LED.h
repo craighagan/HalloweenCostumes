@@ -19,6 +19,7 @@ class LED {
     void blink(int time);
     void glow(int time);
     void choose();
+
   private:
     int _pin;
 };

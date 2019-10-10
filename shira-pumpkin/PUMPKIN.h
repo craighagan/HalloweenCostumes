@@ -8,12 +8,14 @@
 
 #include "Arduino.h"
 #include "LED.h"
+#include "DFRobotDFPlayerMini.h"
+
 
 #define GLOW_RATE 3
 
 class PUMPKIN {
   public:
-    PUMPKIN(LED leds[], int nr_leds);
+    PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3);
     void start();
     void strobe_up();
     void strobe_down();
@@ -27,10 +29,15 @@ class PUMPKIN {
     void alternate(int nr_times, int blink_delay);
     void alternate_color(int middle_led, int nr_times, int blink_delay);
     void all_on();
+    void play_sound();
     void test();
+
+    void play_first();
+    void set_volume();
   private:
     LED *_leds;
     int _nr_leds;
+    DFRobotDFPlayerMini *_mp3;
 };
 
 #endif
