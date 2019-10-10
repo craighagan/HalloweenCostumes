@@ -11,6 +11,8 @@
 #include "DFRobotDFPlayerMini.h"
 
 
+#define NR_BLINKS 30
+
 PUMPKIN::PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3) {
   _leds = leds;
   _nr_leds = nr_leds;
@@ -246,8 +248,18 @@ void PUMPKIN::all_on() {
 }
 
 void PUMPKIN::play_sound() {
-  if (_mp3->available()) {
-      _mp3->next();    
+  int nr_tries = 5;
+
+  while (nr_tries-- >= 0) {
+  if (_mp3 && _mp3->available()) {
+      Serial.println("playing next track");
+      _mp3->pause();
+      _mp3->next();
+      break;
+    } else {
+      Serial.println("no player, not playing");
+      do_sleep(50);
+    }
   }
 }
 
@@ -263,6 +275,8 @@ void PUMPKIN::test() {
 void PUMPKIN::start() {
   int led;
   int action = random(17);
+
+  Serial.println(action);
 
   //action = 11; //deleteme
   switch (action) {
@@ -285,7 +299,7 @@ void PUMPKIN::start() {
       break;
     case 6:
       play_sound();
-      alternate_color(2, random(5) + 5, 65);
+      alternate_color(2, random(NR_BLINKS) + NR_BLINKS, 65);
       break;
     case 7:
       play_sound();
@@ -301,11 +315,11 @@ void PUMPKIN::start() {
       break;
     case 10:
       play_sound();
-      alternate(random(5) + 5, 45);
+      alternate(random(NR_BLINKS) + NR_BLINKS, 45);
       break;
     case 11:
       play_sound();
-      alternate_color(2, random(5) + 5, 120);
+      alternate_color(2, random(NR_BLINKS) + NR_BLINKS, 120);
       break;
     case 12:
       play_sound();
@@ -313,7 +327,7 @@ void PUMPKIN::start() {
       break;
     case 13:
       play_sound();
-      blink_all(random(3));
+      blink_all(random(NR_BLINKS));
       break;
     case 14:
       play_sound();
@@ -321,12 +335,12 @@ void PUMPKIN::start() {
       break;
     case 15:
       play_sound();
-      alternate(random(5) + 5, 45);
+      alternate(random(NR_BLINKS) + NR_BLINKS, 45);
       break;
     case 16:
       play_sound();
       all_on();
       break;
   }
-  do_sleep(random(5) * 1000);
+  do_sleep(random(15) * 1000);
 }

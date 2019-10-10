@@ -16,19 +16,75 @@ LED leds[] = {
   LED(3), // purple
 };
 
-int serial_tx = 10;
-int serial_rx = 11;
+int serial_tx = 11;
+int serial_rx = 10;
 SoftwareSerial mp3serial(serial_tx, serial_rx);
 //MP3 mp3(&mp3serial);
 DFRobotDFPlayerMini myDFPlayer;
-
 
 PUMPKIN pumpkin(leds, NR_LEDS, &myDFPlayer);
 
 int i;
 
+void printDetail(uint8_t type, int value){
+  switch (type) {
+    case TimeOut:
+      Serial.println(F("Time Out!"));
+      break;
+    case WrongStack:
+      Serial.println(F("Stack Wrong!"));
+      break;
+    case DFPlayerCardInserted:
+      Serial.println(F("Card Inserted!"));
+      break;
+    case DFPlayerCardRemoved:
+      Serial.println(F("Card Removed!"));
+      break;
+    case DFPlayerCardOnline:
+      Serial.println(F("Card Online!"));
+      break;
+    case DFPlayerPlayFinished:
+      Serial.print(F("Number:"));
+      Serial.print(value);
+      Serial.println(F(" Play Finished!"));
+      break;
+    case DFPlayerError:
+      Serial.print(F("DFPlayerError:"));
+      switch (value) {
+        case Busy:
+          Serial.println(F("Card not found"));
+          break;
+        case Sleeping:
+          Serial.println(F("Sleeping"));
+          break;
+        case SerialWrongStack:
+          Serial.println(F("Get Wrong Stack"));
+          break;
+        case CheckSumNotMatch:
+          Serial.println(F("Check Sum Not Match"));
+          break;
+        case FileIndexOut:
+          Serial.println(F("File Index Out of Bound"));
+          break;
+        case FileMismatch:
+          Serial.println(F("Cannot Find File"));
+          break;
+        case Advertise:
+          Serial.println(F("In Advertise"));
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+
 void setup() {
   mp3serial.begin(9600);
+  Serial.begin(9600);
 
   if (!myDFPlayer.begin(mp3serial)) {  //Use mp3serial to communicate with mp3.
     Serial.println(F("Unable to begin:"));
@@ -36,12 +92,16 @@ void setup() {
     Serial.println(F("2.Please insert the SD card!"));
     //while(true);
   }
-  Serial.println(F("DFPlayer Mini online."));
 
-  myDFPlayer.setTimeOut(500); //Set serial communictaion time out 500ms
+  if (myDFPlayer.available()) {
+     Serial.println(F("DFPlayer Mini online."));
+  }
+  printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
+
+  myDFPlayer.setTimeOut(750); //Set serial communictaion time out 500ms
 
   //----Set volume----
-  myDFPlayer.volume(15);  //Set volume value (0~30).
+  myDFPlayer.volume(30);  //Set volume value (0~30).
   //myDFPlayer.volumeUp(); //Volume Up
   //myDFPlayer.volumeDown(); //Volume Down
 
