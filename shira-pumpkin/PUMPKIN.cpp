@@ -11,7 +11,7 @@
 #include "DFRobotDFPlayerMini.h"
 
 
-#define NR_BLINKS 30
+#define NR_BLINKS 15
 
 PUMPKIN::PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3) {
   _leds = leds;
@@ -247,18 +247,76 @@ void PUMPKIN::all_on() {
   }
 }
 
+
+void PUMPKIN::print_detail(uint8_t type, int value){
+  switch (type) {
+    case TimeOut:
+      Serial.println(F("Time Out!"));
+      break;
+    case WrongStack:
+      Serial.println(F("Stack Wrong!"));
+      break;
+    case DFPlayerCardInserted:
+      Serial.println(F("Card Inserted!"));
+      break;
+    case DFPlayerCardRemoved:
+      Serial.println(F("Card Removed!"));
+      break;
+    case DFPlayerCardOnline:
+      Serial.println(F("Card Online!"));
+      break;
+    case DFPlayerPlayFinished:
+      Serial.print(F("Number:"));
+      Serial.print(value);
+      Serial.println(F(" Play Finished!"));
+      break;
+    case DFPlayerError:
+      Serial.print(F("DFPlayerError:"));
+      switch (value) {
+        case Busy:
+          Serial.println(F("Card not found"));
+          break;
+        case Sleeping:
+          Serial.println(F("Sleeping"));
+          break;
+        case SerialWrongStack:
+          Serial.println(F("Get Wrong Stack"));
+          break;
+        case CheckSumNotMatch:
+          Serial.println(F("Check Sum Not Match"));
+          break;
+        case FileIndexOut:
+          Serial.println(F("File Index Out of Bound"));
+          break;
+        case FileMismatch:
+          Serial.println(F("Cannot Find File"));
+          break;
+        case Advertise:
+          Serial.println(F("In Advertise"));
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+
 void PUMPKIN::play_sound() {
   int nr_tries = 5;
 
-  while (nr_tries-- >= 0) {
-  if (_mp3 && _mp3->available()) {
+ while (nr_tries-- >= 0) {
+  if (_mp3 && _mp3->waitAvailable(1000)) {
       Serial.println("playing next track");
-      _mp3->pause();
+      //_mp3->pause();
       _mp3->next();
+      print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
       break;
     } else {
       Serial.println("no player, not playing");
-      do_sleep(50);
+      do_sleep(150);
     }
   }
 }
@@ -274,11 +332,11 @@ void PUMPKIN::test() {
 
 void PUMPKIN::start() {
   int led;
-  int action = random(17);
-
+  //int action = random(17);
+  int action = random(3) + 10;
   Serial.println(action);
 
-  //action = 11; //deleteme
+  action = 11; //deleteme
   switch (action) {
     case 0:
     case 1:
@@ -323,12 +381,12 @@ void PUMPKIN::start() {
       break;
     case 12:
       play_sound();
-      glow_all();
+      blink_all(random(NR_BLINKS));
       break;
     case 13:
       play_sound();
-      blink_all(random(NR_BLINKS));
-      break;
+      glow_all();
+      break;      
     case 14:
       play_sound();
       shira_morse();
@@ -342,5 +400,5 @@ void PUMPKIN::start() {
       all_on();
       break;
   }
-  do_sleep(random(15) * 1000);
+  do_sleep(random(30) * 1000);
 }

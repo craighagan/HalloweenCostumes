@@ -31,6 +31,8 @@ class PUMPKIN {
     void all_on();
     void play_sound();
     void test();
+    void PUMPKIN::print_detail(uint8_t type, int value);
+
 
     void play_first();
     void set_volume();

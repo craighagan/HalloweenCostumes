@@ -3,10 +3,11 @@
 #include "PUMPKIN.h"
 #include "Sleep.h"
 #include "SoftwareSerial.h"
-
 // https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299#Sample_Code
 #include "DFRobotDFPlayerMini.h"
 
+
+#define VOLUME 30
 #define NR_LEDS 5
 
 LED leds[] = {
@@ -18,12 +19,10 @@ LED leds[] = {
 
 int serial_tx = 11;
 int serial_rx = 10;
-SoftwareSerial mp3serial(serial_tx, serial_rx);
-//MP3 mp3(&mp3serial);
+SoftwareSerial mp3serial(serial_rx, serial_tx);
 DFRobotDFPlayerMini myDFPlayer;
 
 PUMPKIN pumpkin(leds, NR_LEDS, &myDFPlayer);
-
 int i;
 
 void printDetail(uint8_t type, int value){
@@ -85,23 +84,19 @@ void printDetail(uint8_t type, int value){
 void setup() {
   mp3serial.begin(9600);
   Serial.begin(9600);
+  myDFPlayer.begin(mp3serial, true, true);
 
-  if (!myDFPlayer.begin(mp3serial)) {  //Use mp3serial to communicate with mp3.
-    Serial.println(F("Unable to begin:"));
-    Serial.println(F("1.Please recheck the connection!"));
-    Serial.println(F("2.Please insert the SD card!"));
-    //while(true);
-  }
+  delay(60);
 
   if (myDFPlayer.available()) {
      Serial.println(F("DFPlayer Mini online."));
   }
   printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
 
-  myDFPlayer.setTimeOut(750); //Set serial communictaion time out 500ms
+  myDFPlayer.setTimeOut(500); //Set serial communictaion time out 500ms
 
   //----Set volume----
-  myDFPlayer.volume(30);  //Set volume value (0~30).
+  myDFPlayer.volume(VOLUME);  //Set volume value (0~30).
   //myDFPlayer.volumeUp(); //Volume Up
   //myDFPlayer.volumeDown(); //Volume Down
 
@@ -115,7 +110,7 @@ void setup() {
 
   //----Set device we use SD as default----
 //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_U_DISK);
-  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
+ myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
 //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_AUX);
 //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SLEEP);
 //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_FLASH);
