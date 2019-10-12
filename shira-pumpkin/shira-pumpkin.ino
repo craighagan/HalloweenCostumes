@@ -7,14 +7,14 @@
 #include "DFRobotDFPlayerMini.h"
 
 
-#define VOLUME 30
+#define VOLUME 10
 #define NR_LEDS 5
 
 LED leds[] = {
   LED(13), // orange
   LED(12), // orange
-  LED(2), // purple
   LED(3), // purple
+  LED(2), // purple
 };
 
 int serial_tx = 11;
@@ -25,7 +25,7 @@ DFRobotDFPlayerMini myDFPlayer;
 PUMPKIN pumpkin(leds, NR_LEDS, &myDFPlayer);
 int i;
 
-void printDetail(uint8_t type, int value){
+void printDetail(uint8_t type, int value) {
   switch (type) {
     case TimeOut:
       Serial.println(F("Time Out!"));
@@ -89,7 +89,7 @@ void setup() {
   delay(60);
 
   if (myDFPlayer.available()) {
-     Serial.println(F("DFPlayer Mini online."));
+    Serial.println(F("DFPlayer Mini online."));
   }
   printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
 
@@ -102,22 +102,22 @@ void setup() {
 
   //----Set different EQ----
   myDFPlayer.EQ(DFPLAYER_EQ_NORMAL);
-//  myDFPlayer.EQ(DFPLAYER_EQ_POP);
-//  myDFPlayer.EQ(DFPLAYER_EQ_ROCK);
-//  myDFPlayer.EQ(DFPLAYER_EQ_JAZZ);
-//  myDFPlayer.EQ(DFPLAYER_EQ_CLASSIC);
-//  myDFPlayer.EQ(DFPLAYER_EQ_BASS);
+  //  myDFPlayer.EQ(DFPLAYER_EQ_POP);
+  //  myDFPlayer.EQ(DFPLAYER_EQ_ROCK);
+  //  myDFPlayer.EQ(DFPLAYER_EQ_JAZZ);
+  //  myDFPlayer.EQ(DFPLAYER_EQ_CLASSIC);
+  //  myDFPlayer.EQ(DFPLAYER_EQ_BASS);
 
   //----Set device we use SD as default----
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_U_DISK);
- myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_AUX);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SLEEP);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_FLASH);
+  //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_U_DISK);
+  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
+  //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_AUX);
+  //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SLEEP);
+  //  myDFPlayer.outputDevice(DFPLAYER_DEVICE_FLASH);
 
   myDFPlayer.disableLoop(); //disable loop.
 
-  myDFPlayer.play(1);  //Play the first mp3
+  //myDFPlayer.play(1);  //Play the first mp3
 
   setup_sleep();
   randomSeed(analogRead(0));
@@ -125,9 +125,6 @@ void setup() {
     leds[i].off();
   }
   pumpkin.test();
-  do_sleep(64);
-  pumpkin.strobe_up();
-  do_sleep(128);
 }
 
 void loop() {

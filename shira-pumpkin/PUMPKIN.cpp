@@ -11,7 +11,8 @@
 #include "DFRobotDFPlayerMini.h"
 
 
-#define NR_BLINKS 15
+#define NR_BLINKS 20
+#define DELAY_TIME 120
 
 PUMPKIN::PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3) {
   _leds = leds;
@@ -248,7 +249,7 @@ void PUMPKIN::all_on() {
 }
 
 
-void PUMPKIN::print_detail(uint8_t type, int value){
+void PUMPKIN::print_detail(uint8_t type, int value) {
   switch (type) {
     case TimeOut:
       Serial.println(F("Time Out!"));
@@ -305,20 +306,13 @@ void PUMPKIN::print_detail(uint8_t type, int value){
 
 
 void PUMPKIN::play_sound() {
-  int nr_tries = 5;
+  _mp3->next();
+  print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
+}
 
- while (nr_tries-- >= 0) {
-  if (_mp3 && _mp3->waitAvailable(1000)) {
-      Serial.println("playing next track");
-      //_mp3->pause();
-      _mp3->next();
-      print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
-      break;
-    } else {
-      Serial.println("no player, not playing");
-      do_sleep(150);
-    }
-  }
+void PUMPKIN::play_sound(int file_nr) {
+  _mp3->play(file_nr);
+  print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
 }
 
 void PUMPKIN::test() {
@@ -328,6 +322,7 @@ void PUMPKIN::test() {
     do_sleep(1024);
     _leds[led].off();
   }
+  play_sound(2);
 }
 
 void PUMPKIN::start() {
@@ -336,7 +331,7 @@ void PUMPKIN::start() {
   int action = random(3) + 10;
   Serial.println(action);
 
-  action = 11; //deleteme
+  //action = 11; //deleteme
   switch (action) {
     case 0:
     case 1:
@@ -357,7 +352,7 @@ void PUMPKIN::start() {
       break;
     case 6:
       play_sound();
-      alternate_color(2, random(NR_BLINKS) + NR_BLINKS, 65);
+      alternate_color(2, NR_BLINKS, DELAY_TIME);
       break;
     case 7:
       play_sound();
@@ -373,27 +368,27 @@ void PUMPKIN::start() {
       break;
     case 10:
       play_sound();
-      alternate(random(NR_BLINKS) + NR_BLINKS, 45);
+      alternate(NR_BLINKS, DELAY_TIME);
       break;
     case 11:
       play_sound();
-      alternate_color(2, random(NR_BLINKS) + NR_BLINKS, 120);
+      alternate_color(2, NR_BLINKS, DELAY_TIME);
       break;
     case 12:
       play_sound();
-      blink_all(random(NR_BLINKS));
+      blink_all(NR_BLINKS);
       break;
     case 13:
       play_sound();
       glow_all();
-      break;      
+      break;
     case 14:
       play_sound();
       shira_morse();
       break;
     case 15:
       play_sound();
-      alternate(random(NR_BLINKS) + NR_BLINKS, 45);
+      alternate(NR_BLINKS, DELAY_TIME);
       break;
     case 16:
       play_sound();

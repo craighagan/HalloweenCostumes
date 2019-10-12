@@ -30,6 +30,7 @@ class PUMPKIN {
     void alternate_color(int middle_led, int nr_times, int blink_delay);
     void all_on();
     void play_sound();
+    void play_sound(int file_nr);
     void test();
     void PUMPKIN::print_detail(uint8_t type, int value);
 
