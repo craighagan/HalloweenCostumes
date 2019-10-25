@@ -7,7 +7,7 @@
 #include "DFRobotDFPlayerMini.h"
 
 
-#define VOLUME 10
+#define VOLUME 30
 #define NR_LEDS 5
 
 LED leds[] = {
