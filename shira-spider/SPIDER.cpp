@@ -336,7 +336,7 @@ void SPIDER::wait_sensor_activated() {
     Serial.print(distance);
     Serial.println(" in");
     // Send results to Serial Monitor
-    if (distance > 0 and distance <= 36) {
+    if (distance > 0 and distance <= _activation_distance) {
       return;
     }
   }

@@ -28,7 +28,7 @@ int serial_rx = 10;
 SoftwareSerial mp3serial(serial_rx, serial_tx);
 DFRobotDFPlayerMini myDFPlayer;
 
-SPIDER spider(leds, NR_LEDS, &myDFPlayer, &sonar, 40);
+SPIDER spider(leds, NR_LEDS, &myDFPlayer, &sonar, 72);
 int i;
 
 void printDetail(uint8_t type, int value) {
