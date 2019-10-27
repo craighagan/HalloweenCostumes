@@ -347,71 +347,23 @@ void SPIDER::wait_sensor_activated() {
 void SPIDER::start() {
   int led;
   //int action = random(17);
-  int action = random(3) + 10;
+  int action = random(3);
+
+  action = 0;
   Serial.println(action);
 
-  //action = 11; //deleteme
   switch (action) {
     case 0:
-    case 1:
-      // strobe up
       play_sound();
-      strobe_up();
+      alternate(NR_BLINKS, DELAY_TIME);
+      break;    
+    case 1:
+      play_sound();
+      alternate_color(2, NR_BLINKS, DELAY_TIME);
       break;
     case 2:
-    case 3:
-      // strobe down
-      play_sound();
-      strobe_down();
-      break;
-    case 5:
-      play_sound();
-      strobe_up();
-      strobe_down();
-      break;
-    case 6:
-      play_sound();
-      alternate_color(2, NR_BLINKS, DELAY_TIME);
-      break;
-    case 7:
-      play_sound();
-      glow_orange();
-      break;
-    case 8:
-      play_sound();
-      glow_purple();
-      break;
-    case 9:
-      led = random(_nr_leds);
-      _leds[led].choose();
-      break;
-    case 10:
-      play_sound();
-      alternate(NR_BLINKS, DELAY_TIME);
-      break;
-    case 11:
-      play_sound();
-      alternate_color(2, NR_BLINKS, DELAY_TIME);
-      break;
-    case 12:
       play_sound();
       blink_all(NR_BLINKS);
-      break;
-    case 13:
-      play_sound();
-      glow_all();
-      break;
-    case 14:
-      play_sound();
-      shira_morse();
-      break;
-    case 15:
-      play_sound();
-      alternate(NR_BLINKS, DELAY_TIME);
-      break;
-    case 16:
-      play_sound();
-      all_on();
       break;
   }
   do_sleep(3000);
