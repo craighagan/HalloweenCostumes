@@ -1,12 +1,12 @@
 /*
-  PUMPKIN.h - Library for flashing LED code.
-  Created by Craig I. Hagan 9/30/2013
+  SPIDER.h - Library for flashing LED code.
+  Created by Craig I. Hagan 10/25/2019
   Released into the public domain.
 */
 
 
 #include "Arduino.h"
-#include "PUMPKIN.h"
+#include "SPIDER.h"
 #include "Sleep.h"
 #include "DFRobotDFPlayerMini.h"
 
@@ -14,13 +14,17 @@
 #define NR_BLINKS 20
 #define DELAY_TIME 120
 
-PUMPKIN::PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3) {
+SPIDER::SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, int ir_sensor_pin) {
   _leds = leds;
   _nr_leds = nr_leds;
   _mp3 = mp3;
+  _ir_sensor_pin = ir_sensor_pin;
+  int i;
+
+  pinMode(_ir_sensor_pin, INPUT);
 }
 
-void PUMPKIN::strobe_up() {
+void SPIDER::strobe_up() {
   int led;
   for (led = 0; led < _nr_leds; led++) {
     _leds[led].blink(100);
@@ -28,7 +32,7 @@ void PUMPKIN::strobe_up() {
   }
 }
 
-void PUMPKIN::strobe_down() {
+void SPIDER::strobe_down() {
   int led;
   for (led = _nr_leds - 1; led >= 0; led--) {
     _leds[led].blink(100);
@@ -36,14 +40,14 @@ void PUMPKIN::strobe_down() {
   }
 }
 
-void PUMPKIN::glow_up() {
+void SPIDER::glow_up() {
   int led;
   for (led = 0; led < _nr_leds - 1; led++) {
     _leds[led].glow(100);
   }
 }
 
-void PUMPKIN::glow_down() {
+void SPIDER::glow_down() {
   int led;
   for (led = _nr_leds - 1; led >= 0; led--) {
     _leds[led].glow(100);
@@ -51,7 +55,7 @@ void PUMPKIN::glow_down() {
 }
 
 
-void PUMPKIN::glow_purple() {
+void SPIDER::glow_purple() {
   int led;
   int amount;
   for (amount = 0; amount <= 255; amount += GLOW_RATE) {
@@ -70,7 +74,7 @@ void PUMPKIN::glow_purple() {
 }
 
 
-void PUMPKIN::glow_orange() {
+void SPIDER::glow_orange() {
   int led;
   int amount;
   for (amount = 0; amount <= 255; amount += GLOW_RATE) {
@@ -88,7 +92,7 @@ void PUMPKIN::glow_orange() {
   }
 }
 
-void PUMPKIN::glow_all() {
+void SPIDER::glow_all() {
   int led;
   int amount;
   for (amount = 0; amount <= 255; amount += GLOW_RATE) {
@@ -106,7 +110,7 @@ void PUMPKIN::glow_all() {
   }
 }
 
-void PUMPKIN::blink_all(int nr_times) {
+void SPIDER::blink_all(int nr_times) {
   int led, nr_blinks;
   for (nr_blinks = 0; nr_blinks < nr_times; nr_blinks++) {
     for (led = 0; led < _nr_leds; led++) {
@@ -119,7 +123,7 @@ void PUMPKIN::blink_all(int nr_times) {
   }
 }
 
-void PUMPKIN::alternate_color(int middle_led, int nr_times, int blink_delay) {
+void SPIDER::alternate_color(int middle_led, int nr_times, int blink_delay) {
   int led, nr_blinks;
   boolean turn_on = false;
 
@@ -145,7 +149,7 @@ void PUMPKIN::alternate_color(int middle_led, int nr_times, int blink_delay) {
 }
 
 
-void PUMPKIN::alternate(int nr_times, int blink_delay) {
+void SPIDER::alternate(int nr_times, int blink_delay) {
   int led, nr_blinks;
   boolean turn_on = false;
 
@@ -174,7 +178,7 @@ void PUMPKIN::alternate(int nr_times, int blink_delay) {
   }
 }
 
-void PUMPKIN::shira_morse() {
+void SPIDER::shira_morse() {
   // shira :
   // s : ...
   // h : ....
@@ -237,7 +241,7 @@ void PUMPKIN::shira_morse() {
   do_sleep(between_letter_delay);
 }
 
-void PUMPKIN::all_on() {
+void SPIDER::all_on() {
   int led;
   for (led = 0; led < _nr_leds; led++) {
     _leds[led].on();
@@ -249,7 +253,7 @@ void PUMPKIN::all_on() {
 }
 
 
-void PUMPKIN::print_detail(uint8_t type, int value) {
+void SPIDER::print_detail(uint8_t type, int value) {
   switch (type) {
     case TimeOut:
       Serial.println(F("Time Out!"));
@@ -305,17 +309,17 @@ void PUMPKIN::print_detail(uint8_t type, int value) {
 }
 
 
-void PUMPKIN::play_sound() {
+void SPIDER::play_sound() {
   _mp3->next();
   print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
 }
 
-void PUMPKIN::play_sound(int file_nr) {
+void SPIDER::play_sound(int file_nr) {
   _mp3->play(file_nr);
   print_detail(_mp3->readType(), _mp3->read()); //Print the detail message from DFPlayer to handle different errors and states.
 }
 
-void PUMPKIN::test() {
+void SPIDER::test() {
   int led;
   for (led = 0; led < _nr_leds; led++) {
     _leds[led].on();
@@ -325,7 +329,20 @@ void PUMPKIN::test() {
   play_sound(2);
 }
 
-void PUMPKIN::start() {
+void SPIDER::wait_sensor_activated() {
+  int sensor_value;
+
+  while(true) {
+    sensor_value = digitalRead(_ir_sensor_pin);
+    if (sensor_value == HIGH) {
+      break;
+    }
+    do_sleep(100);
+  }
+}
+
+
+void SPIDER::start() {
   int led;
   //int action = random(17);
   int action = random(3) + 10;
@@ -395,5 +412,5 @@ void PUMPKIN::start() {
       all_on();
       break;
   }
-  do_sleep(random(30) * 1000);
+  wait_sensor_activated();
 }

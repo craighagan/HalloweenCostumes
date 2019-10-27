@@ -1,6 +1,6 @@
 
 #include "LED.h"
-#include "PUMPKIN.h"
+#include "SPIDER.h"
 #include "Sleep.h"
 #include "SoftwareSerial.h"
 // https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299#Sample_Code
@@ -9,6 +9,7 @@
 
 #define VOLUME 30
 #define NR_LEDS 5
+#define IR_SENSOR_PIN 7  // HC-SR501 Motion Detector
 
 LED leds[] = {
   LED(13), // orange
@@ -22,7 +23,7 @@ int serial_rx = 10;
 SoftwareSerial mp3serial(serial_rx, serial_tx);
 DFRobotDFPlayerMini myDFPlayer;
 
-PUMPKIN pumpkin(leds, NR_LEDS, &myDFPlayer);
+SPIDER pumpkin(leds, NR_LEDS, &myDFPlayer, IR_SENSOR_PIN);
 int i;
 
 void printDetail(uint8_t type, int value) {

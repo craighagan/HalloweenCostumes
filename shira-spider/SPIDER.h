@@ -1,10 +1,10 @@
 /*
-  PUMPKIN.h - Library for flashing LED code.
-  Created by Craig I. Hagan 9/30/2013
+  SPIDER.h - Library for flashing LED code.
+  Created by Craig I. Hagan 10/25/2019
   Released into the public domain.
 */
-#ifndef PUMPKIN_h
-#define PUMPKIN_h
+#ifndef SPIDER_h
+#define SPIDER_h
 
 #include "Arduino.h"
 #include "LED.h"
@@ -13,9 +13,9 @@
 
 #define GLOW_RATE 3
 
-class PUMPKIN {
+class SPIDER {
   public:
-    PUMPKIN(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3);
+    SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, int ir_sensor_pin);
     void start();
     void strobe_up();
     void strobe_down();
@@ -32,14 +32,15 @@ class PUMPKIN {
     void play_sound();
     void play_sound(int file_nr);
     void test();
-    void PUMPKIN::print_detail(uint8_t type, int value);
-
+    void SPIDER::print_detail(uint8_t type, int value);
+    void SPIDER::wait_sensor_activated();
 
     void play_first();
     void set_volume();
   private:
     LED *_leds;
     int _nr_leds;
+    int _ir_sensor_pin;
     DFRobotDFPlayerMini *_mp3;
 };
 
