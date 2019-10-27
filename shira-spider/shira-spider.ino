@@ -5,12 +5,15 @@
 #include "SoftwareSerial.h"
 // https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299#Sample_Code
 #include "DFRobotDFPlayerMini.h"
+#include "NewPing.h"
 
 
 #define VOLUME 30
 #define NR_LEDS 5
-#define IR_SENSOR_PIN 7  // HC-SR501 Motion Detector
-
+#define TRIGGER_PIN 6
+#define ECHO_PIN 7
+#define MAX_DISTANCE 400
+ 
 LED leds[] = {
   LED(13), // orange
   LED(12), // orange
@@ -18,12 +21,14 @@ LED leds[] = {
   LED(2), // purple
 };
 
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+
 int serial_tx = 11;
 int serial_rx = 10;
 SoftwareSerial mp3serial(serial_rx, serial_tx);
 DFRobotDFPlayerMini myDFPlayer;
 
-SPIDER pumpkin(leds, NR_LEDS, &myDFPlayer, IR_SENSOR_PIN);
+SPIDER spider(leds, NR_LEDS, &myDFPlayer, &sonar, 40);
 int i;
 
 void printDetail(uint8_t type, int value) {
@@ -125,9 +130,9 @@ void setup() {
   for (i = 0; i < NR_LEDS; i++) {
     leds[i].off();
   }
-  pumpkin.test();
+  spider.test();
 }
 
 void loop() {
-  pumpkin.start();
+  spider.start();
 }

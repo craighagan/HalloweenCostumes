@@ -9,13 +9,13 @@
 #include "Arduino.h"
 #include "LED.h"
 #include "DFRobotDFPlayerMini.h"
-
+#include "NewPing.h"
 
 #define GLOW_RATE 3
 
 class SPIDER {
   public:
-    SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, int ir_sensor_pin);
+    SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, NewPing *sonar, int activation_distance);
     void start();
     void strobe_up();
     void strobe_down();
@@ -40,7 +40,8 @@ class SPIDER {
   private:
     LED *_leds;
     int _nr_leds;
-    int _ir_sensor_pin;
+    int _activation_distance;
+    NewPing *_sonar;
     DFRobotDFPlayerMini *_mp3;
 };
 

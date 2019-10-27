@@ -9,19 +9,17 @@
 #include "SPIDER.h"
 #include "Sleep.h"
 #include "DFRobotDFPlayerMini.h"
-
+//#include "NewPing.h"
 
 #define NR_BLINKS 20
 #define DELAY_TIME 120
 
-SPIDER::SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, int ir_sensor_pin) {
+SPIDER::SPIDER(LED leds[], int nr_leds, DFRobotDFPlayerMini *mp3, NewPing *sonar, int activation_distance) {
   _leds = leds;
   _nr_leds = nr_leds;
   _mp3 = mp3;
-  _ir_sensor_pin = ir_sensor_pin;
-  int i;
-
-  pinMode(_ir_sensor_pin, INPUT);
+  _sonar = sonar;
+  _activation_distance = activation_distance;
 }
 
 void SPIDER::strobe_up() {
@@ -330,15 +328,19 @@ void SPIDER::test() {
 }
 
 void SPIDER::wait_sensor_activated() {
-  int sensor_value;
+  float distance = 0;
 
-  while(true) {
-    sensor_value = digitalRead(_ir_sensor_pin);
-    if (sensor_value == HIGH) {
-      break;
+  while (true) {
+    distance = _sonar->ping_in();
+    Serial.print("Distance = ");
+    Serial.print(distance);
+    Serial.println(" in");
+    // Send results to Serial Monitor
+    if (distance > 0 and distance <= 36) {
+      return;
     }
-    do_sleep(100);
   }
+  do_sleep(250);
 }
 
 
@@ -412,5 +414,6 @@ void SPIDER::start() {
       all_on();
       break;
   }
+  do_sleep(3000);
   wait_sensor_activated();
 }
