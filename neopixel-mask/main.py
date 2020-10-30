@@ -35,7 +35,7 @@ MESSAGES = [
     "     HAPPY HALLOWEEN! ",
 ]
 MAX_PIXELS = 8 * 32
-IO_PIN = 14
+IO_PIN = 5
 
 if esp:
     np = neopixel.NeoPixel(machine.Pin(IO_PIN), MAX_PIXELS)
