@@ -1,3 +1,5 @@
+import time
+import random
 
 try:
     import machine
@@ -6,6 +8,38 @@ try:
 except ImportError:
     esp = False
     import mock
+
+
+MESSAGES = [
+    "     TEST TEST TEST ",
+]
+MAX_PIXELS = 8 * 32
+IO_PIN = 5
+
+
+class Color(object):
+    def __init__(self, color_list, per_char=False):
+        self.color_list = color_list
+        self.cur = 0
+        self.last_char = None
+        self.per_char = per_char
+
+    def get_random_color(self, char=None):
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        return (r, g, b)
+
+    def get_color(self, char=None):
+        if self.last_char != char or self.per_char is False:
+            self.last_char = char
+            self.cur += 1
+            if self.cur >= len(self.color_list):
+                self.cur = 0
+
+        retval = self.color_list[self.cur]
+
+        return retval
 
 
 class FakeNeoPixel(object):
@@ -27,14 +61,6 @@ class FakeNeoPixel(object):
     def write(self):
         pass
 
-
-import time
-
-MESSAGES = [
-    "     HAPPY BIRTHDAY, BEN! ",
-]
-MAX_PIXELS = 8 * 32
-IO_PIN = 5
 
 if esp:
     np = neopixel.NeoPixel(machine.Pin(IO_PIN), MAX_PIXELS)
@@ -222,7 +248,7 @@ def show_character(color, char, np, offset=0, write=False):
             pixel = 8 * pos + subpos
             if pixel < MAX_PIXELS:
                 if c:
-                    np[pixel] = color
+                    np[pixel] = color.get_color(char)
                 else:
                     np[pixel] = (0, 0, 0)
                 subpos += 1
@@ -260,7 +286,11 @@ while True:
         msg_len = len(message)
         cur_pos = 0
         width = 6
-        color = (0, 255, 0)
+        color = Color([
+                    (255, 0, 0), (255, 255, 255), (0, 0, 255),
+                    (0, 255, 0), (255, 255, 0), (255, 0, 255),
+                    (0, 255, 255),
+        ], per_char=True)
 
         while cur_pos < msg_len:
             draw_pos(cur_pos, message, msg_len)
